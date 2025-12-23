@@ -28,7 +28,19 @@ python ingestion/generate_events.py \
   --seed 42 \
   --bad-rate 0.01
 
+## Raw Data Storage (S3)
 
+Generated clickstream events are stored in Amazon S3 as raw, immutable data.
+Objects are written using partition-style prefixes to support efficient
+downstream querying and transformation.
+
+Example S3 layout:
+
+s3://brad-data-engineer-portfolio-raw/
+└── events/
+    └── dt=2025-01-01/
+        └── events.ndjson
+        
 ## Architecture (High Level)
 - Python event generator (local)
 - Amazon S3 data lake (raw / clean / curated)
