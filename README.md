@@ -15,13 +15,13 @@ decoupled storage and compute, partitioned data, and columnar file formats.
 ## Architecture Overview
 
 The pipeline follows a layered data lake architecture:
-'''text
+```text
 Python (event generator)
   → Amazon S3 (raw zone, NDJSON)
   → AWS Glue Data Catalog (schema-on-read)
   → Amazon Athena (CTAS transformation)
   → Amazon S3 (clean zone, Parquet)
-'''
+```
 Future extensions may include dbt for analytics modeling and Glue ETL jobs for
 advanced data quality and transformations.
 
@@ -34,12 +34,12 @@ immutable newline-delimited JSON (NDJSON). Data is stored using partition-style
 prefixes to support efficient downstream querying.
 
 Example S3 layout:
-'''text
+```text
 s3://brad-data-engineer-portfolio-raw/
 └── events/
     └── dt=YYYY-MM-DD/
         └── events.ndjson
-'''
+```
 An AWS Glue crawler catalogs the raw data and registers a table in the Glue Data
 Catalog. The partition key (`dt`) is derived from the S3 path rather than the file
 contents.
@@ -58,12 +58,12 @@ During this step:
 - Existing date partitions are preserved
 
 Example clean S3 layout:
-'''text
+```text
 s3://brad-data-engineer-portfolio-clean/
 └── events/
     └── dt=YYYY-MM-DD/
         └── *.parquet
-'''
+```
 This significantly reduces query cost and improves performance compared to
 querying raw JSON directly.
 
